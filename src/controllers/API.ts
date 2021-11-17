@@ -48,8 +48,24 @@ const getAllBooks = async (req: Request, res: Response) => {
 
     res.status(200).json({ status: 'success', msg: 'success get all books', books });
   } catch (error) {
-    res.status(401).json({ status: 'error', msg: error });
+    res.status(403).json({ status: 'error', msg: error });
   }
 };
 
-export { welcomeApi, addBooks, getAllBooks, deleteBook };
+const detailBook = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const book = await BooksModel.findOne({ _id: id });
+
+    if (!book) {
+      throw 'book id is wrong';
+    }
+
+    res.status(200).json({ status: 'success', msg: 'success get detail book', book });
+  } catch (error) {
+    res.status(400).json({ status: 'error', msg: error });
+  }
+};
+
+export { welcomeApi, addBooks, getAllBooks, deleteBook, detailBook };
