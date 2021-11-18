@@ -68,4 +68,28 @@ const detailBook = async (req: Request, res: Response) => {
   }
 };
 
-export { welcomeApi, addBooks, getAllBooks, deleteBook, detailBook };
+const updateBook = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { title, writer, publish } = req.body;
+
+  try {
+    const updatedBook = await BooksModel.updateOne(
+      { _id: id },
+      {
+        title,
+        writer,
+        yearsPublisher: publish,
+      }
+    );
+
+    if (updatedBook.matchedCount < 1) {
+      throw "Book doesn't exist";
+    }
+
+    res.status(201).json({ status: 'success', msg: 'success update book' });
+  } catch (error) {
+    res.status(400).json({ status: 'error', msg: error });
+  }
+};
+
+export { welcomeApi, addBooks, getAllBooks, deleteBook, detailBook, updateBook };
